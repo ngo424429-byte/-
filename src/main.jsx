@@ -46,6 +46,7 @@ const navItems = [
 ]
 
 const languageOptions = [
+  ['zh', '中文'],
   ['en', 'English'],
   ['es', 'Español'],
   ['fr', 'Français'],
@@ -57,6 +58,7 @@ const languageOptions = [
 
 function translateUrl(lang) {
   if (typeof window === 'undefined') return '#'
+  if (lang === 'zh') return `${window.location.origin}${window.location.pathname}${window.location.hash}`
   return `https://translate.google.com/translate?sl=zh-CN&tl=${lang}&u=${encodeURIComponent(window.location.href)}`
 }
 
@@ -310,9 +312,7 @@ function Nav() {
             <a key={item.id} href={item.href} onClick={(event) => handleJump(event, item)}>{item.label}</a>
           ))}
           <div className="nav-mobile-languages">
-            {languageOptions.map(([code, label]) => (
-              <a key={code} href={translateUrl(code)} target="_blank" rel="noreferrer">{label}</a>
-            ))}
+            <LanguageSelector />
           </div>
           <a className="nav-mobile-cta" href="/#contact" onClick={(event) => handleJump(event, navItems[6])}>提交合作需求</a>
         </motion.div>
@@ -322,18 +322,20 @@ function Nav() {
 }
 
 function LanguageSelector() {
+  const handleLanguageChange = (event) => {
+    const lang = event.target.value
+    window.location.href = translateUrl(lang)
+  }
+
   return (
     <div className="language-selector">
-      <button type="button" aria-label="选择语言">
-        <Globe2 size={15} />
-        <span>Language</span>
-        <ChevronDown size={14} />
-      </button>
-      <div className="language-menu">
+      <Globe2 size={15} />
+      <select defaultValue="zh" onChange={handleLanguageChange} aria-label="选择语言">
         {languageOptions.map(([code, label]) => (
-          <a key={code} href={translateUrl(code)} target="_blank" rel="noreferrer">{label}</a>
+          <option key={code} value={code}>{label}</option>
         ))}
-      </div>
+      </select>
+      <ChevronDown size={14} />
     </div>
   )
 }

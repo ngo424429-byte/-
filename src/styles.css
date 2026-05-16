@@ -218,10 +218,6 @@ a {
 .language-selector {
   position: relative;
   display: inline-flex;
-}
-
-.language-selector > button {
-  display: inline-flex;
   min-height: 38px;
   align-items: center;
   justify-content: center;
@@ -231,47 +227,30 @@ a {
   background: rgba(255, 255, 255, 0.5);
   padding: 0 0.72rem;
   color: rgba(16, 17, 17, 0.7);
-  font-size: 0.76rem;
-  font-weight: 850;
-  cursor: pointer;
 }
 
-.language-selector:hover > button {
+.language-selector:hover {
   color: var(--ink);
   background: white;
 }
 
-.language-menu {
-  position: absolute;
-  top: calc(100% + 0.55rem);
-  right: 0;
-  display: none;
-  min-width: 150px;
-  overflow: hidden;
-  border: 1px solid rgba(16, 17, 17, 0.1);
-  border-radius: 0.85rem;
-  background: rgba(246, 243, 234, 0.98);
-  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.2);
-  padding: 0.35rem;
-}
-
-.language-selector:hover .language-menu,
-.language-selector:focus-within .language-menu {
-  display: grid;
-}
-
-.language-menu a {
-  border-radius: 0.6rem;
-  padding: 0.58rem 0.68rem;
-  color: #222;
+.language-selector select {
+  position: relative;
+  z-index: 1;
+  max-width: 92px;
+  border: 0;
+  outline: 0;
+  appearance: none;
+  background: transparent;
+  color: inherit;
   font-size: 0.8rem;
-  font-weight: 800;
-  text-decoration: none;
-  white-space: nowrap;
+  font-weight: 850;
+  cursor: pointer;
 }
 
-.language-menu a:hover {
-  background: rgba(16, 17, 17, 0.07);
+.language-selector select option {
+  color: #101111;
+  background: #f6f3ea;
 }
 
 .nav-cta,
@@ -336,17 +315,19 @@ a {
 }
 
 .nav-mobile-languages {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.35rem;
+  display: block;
   margin: 0.35rem 0;
 }
 
-.nav-mobile-languages a {
-  border: 1px solid rgba(16, 17, 17, 0.08);
-  background: rgba(255, 255, 255, 0.45);
-  text-align: center;
-  font-size: 0.78rem;
+.nav-mobile-languages .language-selector {
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 46px;
+}
+
+.nav-mobile-languages .language-selector select {
+  max-width: none;
+  width: 100%;
 }
 
 .hero {
@@ -1443,7 +1424,7 @@ a {
   gap: 0.8rem;
 }
 
-.gallery-nav .language-selector > button {
+.gallery-nav .language-selector {
   min-height: 40px;
 }
 
@@ -2283,13 +2264,14 @@ footer {
     display: none;
   }
 
-  .gallery-nav .language-selector > button span {
-    display: none;
+  .gallery-nav .language-selector {
+    width: 44px;
+    padding: 0 0.55rem;
   }
 
-  .gallery-nav .language-selector > button {
-    width: 40px;
-    padding: 0;
+  .gallery-nav .language-selector select {
+    width: 16px;
+    color: transparent;
   }
 
   .gallery-hero {
