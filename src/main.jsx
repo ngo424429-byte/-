@@ -466,7 +466,7 @@ function Products() {
 function ProductLineCard({ product, delay }) {
   const { name, desc, scene, custom, cert, dev, gallery } = product
   const fields = procurementFields({ name, scene, custom, cert, dev }).filter(([label]) =>
-    ['适用客户', '适用市场', '可定制内容', '认证方向', '起订量', '打样周期'].includes(label),
+    ['适用市场', '可定制内容', '认证方向'].includes(label),
   )
 
   return (
@@ -478,6 +478,7 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PRODUCT LINE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
+        <p className="product-scene">{scene}</p>
         <dl className="procurement-list">
           {fields.map(([label, value]) => (
             <div key={label}><dt>{label}</dt><dd>{value}</dd></div>

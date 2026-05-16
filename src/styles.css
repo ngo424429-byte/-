@@ -832,6 +832,15 @@ a {
   line-height: 1.68;
 }
 
+.product-line-card .product-scene {
+  margin-top: 0.72rem;
+  border-left: 3px solid rgba(49, 85, 61, 0.55);
+  padding-left: 0.65rem;
+  color: #2f4336;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
 .product-line-card dl {
   display: grid;
   gap: 0.52rem;
@@ -839,8 +848,8 @@ a {
 }
 
 .product-line-card .procurement-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem 0.7rem;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
 }
 
 .product-line-card dl div {
