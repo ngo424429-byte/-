@@ -772,7 +772,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 1.45rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+    linear-gradient(180deg, #f7f3ea, #ebe4d6);
+  color: #141514;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
   transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
@@ -781,7 +782,7 @@ a {
   transform: translateY(-5px);
   border-color: rgba(182, 216, 185, 0.32);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.045));
+    linear-gradient(180deg, #fbf8f0, #eee7da);
   box-shadow: 0 30px 95px rgba(0, 0, 0, 0.28);
 }
 
@@ -812,7 +813,7 @@ a {
 }
 
 .product-line-card span {
-  color: var(--accent);
+  color: #31553d;
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -820,13 +821,13 @@ a {
 
 .product-line-card h3 {
   margin: 0.55rem 0 0.45rem;
-  color: white;
+  color: #151515;
   font-size: 1.14rem;
 }
 
 .product-line-card p {
   margin: 0;
-  color: var(--muted);
+  color: #4a4942;
   font-size: 0.9rem;
   line-height: 1.68;
 }
@@ -843,19 +844,19 @@ a {
 }
 
 .product-line-card dl div {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(16, 17, 17, 0.12);
   padding-top: 0.52rem;
 }
 
 .product-line-card dt {
-  color: rgba(182, 216, 185, 0.9);
+  color: #31553d;
   font-size: 0.72rem;
   font-weight: 900;
 }
 
 .product-line-card dd {
   margin: 0.16rem 0 0;
-  color: rgba(245, 243, 237, 0.76);
+  color: #3f3e39;
   font-size: 0.82rem;
   line-height: 1.48;
 }
@@ -865,7 +866,7 @@ a {
   align-items: center;
   gap: 0.35rem;
   margin-top: 1rem;
-  color: var(--accent);
+  color: #254a32;
   font-size: 0.86rem;
   font-weight: 850;
   text-decoration: none;
