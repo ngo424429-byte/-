@@ -45,6 +45,21 @@ const navItems = [
   { id: 'contact', label: '联系我们', href: '/#contact', type: 'section' },
 ]
 
+const languageOptions = [
+  ['en', 'English'],
+  ['es', 'Español'],
+  ['fr', 'Français'],
+  ['de', 'Deutsch'],
+  ['ja', '日本語'],
+  ['ko', '한국어'],
+  ['ru', 'Русский'],
+]
+
+function translateUrl(lang) {
+  if (typeof window === 'undefined') return '#'
+  return `https://translate.google.com/translate?sl=zh-CN&tl=${lang}&u=${encodeURIComponent(window.location.href)}`
+}
+
 const img = {
   hero: '/hongtu-new/optimized/hero-factory-building.jpg',
   reception: '/hongtu-new/optimized/company-reception-clean.jpg',
@@ -165,11 +180,52 @@ const inquiryChecklist = [
   '产品类型',
   '目标市场',
   '预计数量',
-  '是否需要 LOGO / 包装定制',
+  '是否需要 LOGO 定制',
+  '是否需要包装定制',
   '是否需要认证',
   '参考图片或产品编号',
   '期望交期',
+  '联系方式',
 ]
+
+const inquiryMailBody = [
+  'Product type:',
+  'Target market:',
+  'Estimated quantity:',
+  'Customization needs:',
+  'Certification requirements:',
+  'Reference model or image:',
+  'Expected delivery time:',
+  'Contact name:',
+  'Phone / WhatsApp / WeChat:',
+].join('\n')
+
+const mailtoInquiry = `mailto:${copy.email}?subject=${encodeURIComponent('Helmet ODM/OEM Inquiry')}&body=${encodeURIComponent(inquiryMailBody)}`
+
+function procurementFields({ name, scene, custom, cert, dev }) {
+  const marketMap = {
+    自行车头盔: '欧洲 / 美国 / 日本 / 其他市场',
+    城市通勤头盔: '城市通勤、跨境平台、线下渠道',
+    公路骑行头盔: '骑行品牌、运动渠道、俱乐部客户',
+    儿童头盔: '儿童用品、平衡车、礼品及防护渠道',
+    滑雪头盔: '雪具品牌、户外渠道、季节性采购',
+    '轮滑 / 滑板头盔': '青少年运动、线下零售、跨境渠道',
+  }
+
+  return [
+    ['适用客户', name.includes('儿童') ? '儿童运动品牌、渠道商、礼品客户' : '品牌方、采购商、跨境卖家、渠道客户'],
+    ['适用市场', marketMap[name] || '按目标市场确认'],
+    ['外壳工艺', '按具体款式确认'],
+    ['尺寸范围', '按具体款式确认'],
+    ['重量范围', '按产品和配置确认'],
+    ['可定制内容', custom],
+    ['认证方向', cert],
+    ['起订量', '按款式、定制复杂度和包装需求确认'],
+    ['打样周期', dev.includes('快速') ? '常规打样约 7 天，复杂项目另行确认' : '按产品和定制复杂度确认'],
+    ['包装方式', '彩盒、说明书、吊牌、外箱标签可评估定制'],
+    ['适用场景', scene],
+  ]
+}
 
 function scrollToSection(event, id) {
   event.preventDefault()
@@ -237,6 +293,7 @@ function Nav() {
             <a key={item.id} href={item.href} onClick={(event) => handleJump(event, item)}>{item.label}</a>
           ))}
         </div>
+        <LanguageSelector />
         <a className="nav-cta" href="/#contact" onClick={(event) => handleJump(event, navItems[6])}>获取报价</a>
         <button className="nav-toggle" onClick={() => setOpen(!open)} aria-label="打开导航菜单">
           {open ? <X size={22} /> : <Menu size={22} />}
@@ -252,10 +309,32 @@ function Nav() {
           {navItems.map((item) => (
             <a key={item.id} href={item.href} onClick={(event) => handleJump(event, item)}>{item.label}</a>
           ))}
+          <div className="nav-mobile-languages">
+            {languageOptions.map(([code, label]) => (
+              <a key={code} href={translateUrl(code)} target="_blank" rel="noreferrer">{label}</a>
+            ))}
+          </div>
           <a className="nav-mobile-cta" href="/#contact" onClick={(event) => handleJump(event, navItems[6])}>提交合作需求</a>
         </motion.div>
       )}
     </header>
+  )
+}
+
+function LanguageSelector() {
+  return (
+    <div className="language-selector">
+      <button type="button" aria-label="选择语言">
+        <Globe2 size={15} />
+        <span>Language</span>
+        <ChevronDown size={14} />
+      </button>
+      <div className="language-menu">
+        {languageOptions.map(([code, label]) => (
+          <a key={code} href={translateUrl(code)} target="_blank" rel="noreferrer">{label}</a>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -271,15 +350,15 @@ function Hero() {
           </div>
           <h1>
             <span>运动头盔</span>
-            <span>制造合作伙伴</span>
+            <span>ODM/OEM 定制与量产工厂</span>
           </h1>
-          <p className="hero-sub">专注自行车头盔、滑雪头盔、儿童头盔与城市运动头盔的研发、定制与量产交付，为品牌方、采购商、跨境卖家和渠道客户提供稳定制造支持。</p>
+          <p className="hero-sub">为骑行品牌、跨境卖家、贸易商和渠道客户，提供自行车头盔、滑雪头盔、儿童头盔等产品的选型、打样、认证支持与批量交付。</p>
           <div className="hero-tags">
             {trustTags.map((tag) => <span key={tag}><CheckCircle2 size={15} />{tag}</span>)}
           </div>
           <div className="actions">
-            <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>获取合作报价<ArrowRight size={16} /></a>
-            <a className="btn ghost" href="/gallery">查看产品图库</a>
+            <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>发送需求，获取报价<ArrowRight size={16} /></a>
+            <a className="btn ghost" href="/gallery">查看现有款式</a>
           </div>
         </Reveal>
         <Reveal delay={0.08} className="hero-visual">
@@ -383,7 +462,10 @@ function Products() {
 }
 
 function ProductLineCard({ product, delay }) {
-  const { name, desc, scene, custom, cert, gallery } = product
+  const { name, desc, scene, custom, cert, dev, gallery } = product
+  const fields = procurementFields({ name, scene, custom, cert, dev }).filter(([label]) =>
+    ['适用客户', '适用市场', '可定制内容', '认证方向', '起订量', '打样周期'].includes(label),
+  )
 
   return (
     <Reveal delay={delay} className="product-line-card">
@@ -394,10 +476,10 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PRODUCT LINE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
-        <dl>
-          <div><dt>适用场景</dt><dd>{scene}</dd></div>
-          <div><dt>可定制</dt><dd>{custom}</dd></div>
-          <div><dt>认证支持</dt><dd>{cert}</dd></div>
+        <dl className="procurement-list">
+          {fields.map(([label, value]) => (
+            <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+          ))}
         </dl>
         <a className="product-line-link" href="/gallery">查看该类更多款式<ArrowRight size={15} /></a>
       </div>
@@ -654,6 +736,10 @@ function Contact() {
             <span><Globe2 size={17} />{copy.address}</span>
             <span><ClipboardCheck size={17} />适合品牌方、采购商、跨境卖家、渠道商、贸易公司及自有品牌项目咨询。</span>
           </div>
+          <div className="contact-actions">
+            <a className="btn light" href={mailtoInquiry}>发送邮件询盘<ArrowRight size={16} /></a>
+            <a className="btn ghost" href="/gallery">查看现有款式</a>
+          </div>
         </Reveal>
         <Reveal delay={0.08} className="direct-contact-card">
           <div className="inquiry-checklist">
@@ -669,7 +755,7 @@ function Contact() {
             <img src={img.wechatQr} alt="微信二维码" loading="lazy" />
             <div>
               <strong>微信咨询</strong>
-              <span>扫码添加微信，发送产品图片、编号或定制需求。</span>
+              <span>扫码添加微信，发送产品图片、产品编号、目标市场、预计数量和定制需求。</span>
             </div>
           </div>
         </Reveal>
@@ -705,11 +791,35 @@ function Footer() {
         <a href={`mailto:${copy.email}`}>{copy.email}</a>
         <p>{copy.contactPerson}：{copy.phone}</p>
         <p>{copy.address}</p>
+        <a className="consumer-link" href="#" aria-label="消费者购买入口占位">消费者购买入口｜进入微信小店 / 小程序</a>
       </div>
       <div className="footer-bottom">
         <p>(c) 2026 Hongtu Sporting Goods. All rights reserved.</p>
       </div>
     </footer>
+  )
+}
+
+function MobileContactBar() {
+  return (
+    <div className="mobile-contact-bar" aria-label="移动端快速联系">
+      <a href="/#contact">
+        <ClipboardCheck size={17} />
+        <span>微信咨询</span>
+      </a>
+      <a href={mailtoInquiry}>
+        <Mail size={17} />
+        <span>发送邮件</span>
+      </a>
+      <a href={`tel:${copy.phone}`}>
+        <Phone size={17} />
+        <span>电话联系</span>
+      </a>
+      <a href="/gallery">
+        <SearchCheck size={17} />
+        <span>查看图库</span>
+      </a>
+    </div>
   )
 }
 
@@ -727,6 +837,7 @@ function GalleryPage() {
         </a>
         <div>
           <a href="/">返回首页</a>
+          <LanguageSelector />
           <a className="nav-cta" href="/#contact" onClick={goToHomeContact}>获取报价</a>
         </div>
       </header>
@@ -774,9 +885,12 @@ function GalleryPage() {
               <div>
                 <span>{item.id}</span>
                 <h3>{item.category}</h3>
-                <p>{item.scene}</p>
-                <small>{item.custom}</small>
-                <a href="/#contact" onClick={goToHomeContact}>发送此款咨询</a>
+                <dl className="gallery-card-specs">
+                  <div><dt>适用场景</dt><dd>{item.scene}</dd></div>
+                  <div><dt>可定制内容</dt><dd>{item.custom}</dd></div>
+                  <div><dt>认证支持</dt><dd>{item.cert}</dd></div>
+                </dl>
+                <a href="/#contact" onClick={goToHomeContact}>发送 {item.id} 咨询</a>
               </div>
             </Reveal>
           ))}
@@ -803,17 +917,19 @@ function GalleryPage() {
               <h3>{preview.category}</h3>
               <p>{preview.desc}</p>
               <dl>
+                <div><dt>产品编号</dt><dd>{preview.id}</dd></div>
                 <div><dt>适用场景</dt><dd>{preview.scene}</dd></div>
                 <div><dt>可定制内容</dt><dd>{preview.custom}</dd></div>
                 <div><dt>认证支持</dt><dd>{preview.cert}</dd></div>
                 <div><dt>开发方式</dt><dd>{preview.dev}</dd></div>
               </dl>
-              <a className="btn light" href="/#contact" onClick={goToHomeContact}>用该款咨询报价<ArrowRight size={16} /></a>
+              <a className="btn light" href="/#contact" onClick={goToHomeContact}>发送 {preview.id} 获取报价<ArrowRight size={16} /></a>
             </div>
           </div>
         </div>
       )}
       <Footer />
+      <MobileContactBar />
     </main>
   )
 }
@@ -842,6 +958,7 @@ function HomePage() {
       <FAQ />
       <Contact />
       <Footer />
+      <MobileContactBar />
     </main>
   )
 }
