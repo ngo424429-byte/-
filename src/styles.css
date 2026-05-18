@@ -1717,7 +1717,7 @@ a {
 .gallery-hero {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 4.6rem 1rem 3.2rem;
+  padding: 4.6rem 1rem 4.4rem;
 }
 
 .gallery-hero-layout {
@@ -1767,6 +1767,7 @@ a {
 .gallery-hero-image {
   position: relative;
   overflow: hidden;
+  height: clamp(430px, 48vw, 560px);
   min-height: 430px;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 1.55rem;
@@ -1777,7 +1778,7 @@ a {
 .gallery-hero-image img {
   width: 100%;
   height: 100%;
-  min-height: 430px;
+  min-height: 0;
   object-fit: cover;
   object-position: center 34%;
   filter: saturate(0.82) contrast(1.04) brightness(0.84);
@@ -1827,7 +1828,8 @@ a {
 .gallery-section {
   max-width: none;
   margin: 0;
-  background: linear-gradient(180deg, #0a0a0a 0%, #f3efe6 7%, #ebe6dc 100%);
+  border-top: 1px solid rgba(20, 20, 20, 0.08);
+  background: linear-gradient(180deg, #f3efe6 0%, #ebe6dc 100%);
   padding: 4.4rem 1rem calc(6.5rem + env(safe-area-inset-bottom));
 }
 
@@ -3022,12 +3024,16 @@ footer {
   }
 
   .gallery-hero {
-    padding: 3.6rem 1rem 2.2rem;
+    padding: 3.6rem 1rem 3rem;
   }
 
-  .gallery-hero-image,
+  .gallery-hero-image {
+    height: 360px;
+    min-height: 0;
+  }
+
   .gallery-hero-image img {
-    min-height: 320px;
+    min-height: 0;
   }
 
   .gallery-hero h1 span:first-child {
