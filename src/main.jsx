@@ -342,9 +342,13 @@ function LanguageSelector() {
 
 function Hero() {
   return (
-    <section id="top" className="hero section-offset">
-      <div className="hero-shell">
-        <Reveal className="hero-copy">
+    <section id="top" className="hero hero-industrial section-offset">
+      <div className="hero-bg-image" aria-hidden="true" />
+      <div className="hero-bg-overlay" aria-hidden="true" />
+      <div className="hero-bg-light" aria-hidden="true" />
+      <div className="hero-bg-grid" aria-hidden="true" />
+      <div className="hero-shell hero-content">
+        <div className="hero-copy hero-copy-animated">
           <p className="eyebrow hero-eyebrow">{copy.companyEn}</p>
           <div className="hero-kicker">
             <span>Helmet Manufacturing</span>
@@ -362,15 +366,12 @@ function Hero() {
             <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>发送需求，获取报价<ArrowRight size={16} /></a>
             <a className="btn ghost" href="/gallery">查看现有款式</a>
           </div>
-        </Reveal>
-        <Reveal delay={0.08} className="hero-visual">
-          <img src={img.hero} alt="东莞宏途运动用品工厂外观" loading="eager" />
-          <div className="hero-image-note" aria-label="Hongtu manufacturing capability">
-            <span>HONGTU MANUFACTURING BASE</span>
-            <strong>Integrated helmet R&D, sampling, production, testing and export delivery for global ODM/OEM partners.</strong>
-            <p>Established 2015 · BSCI audited factory · CE / CPSC / ASTM testing support</p>
-          </div>
-        </Reveal>
+        </div>
+        <div className="hero-industrial-stats" aria-label="核心信任数据">
+          {['2015 年成立', '约 10000㎡ 工厂', 'BSCI 工厂认证', 'CE / CPSC / ASTM 支持', 'ODM / OEM 定制量产'].map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -406,17 +407,17 @@ function CompanyIntro() {
 function About() {
   return (
     <section id="about" className="section section-offset">
-      <div className="about-layout">
+      <div className="about-layout about-industrial-layout">
         <div>
           <SectionHead
             eyebrow="Company Capability"
             title="从产品开发到批量交付的完整制造能力"
             text="宏途服务品牌客户、跨境卖家与渠道客户，围绕运动头盔产品提供研发打样、生产制造、品质检验和出口交付支持。"
           />
-          <div className="capability-grid">
+          <div className="capability-grid capability-lines">
             {capabilities.map(([title, text, Icon], index) => (
               <Reveal key={title} delay={index * 0.04} className="capability-card">
-                <Icon size={22} />
+                <span className="capability-index">{String(index + 1).padStart(2, '0')}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </Reveal>
@@ -466,7 +467,7 @@ function Products() {
 function ProductLineCard({ product, delay }) {
   const { name, desc, scene, custom, cert, dev, gallery } = product
   const fields = procurementFields({ name, scene, custom, cert, dev }).filter(([label]) =>
-    ['适用市场', '可定制内容', '认证方向'].includes(label),
+    ['适用客户', '适用市场', '可定制内容', '认证方向', '打样周期'].includes(label),
   )
 
   return (
@@ -475,10 +476,9 @@ function ProductLineCard({ product, delay }) {
         <img src={gallery[0]} alt={`${name}代表产品`} loading="lazy" />
       </a>
       <div>
-        <span>ODM / OEM PRODUCT LINE</span>
+        <span>ODM / OEM PROCUREMENT FILE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
-        <p className="product-scene">{scene}</p>
         <dl className="procurement-list">
           {fields.map(([label, value]) => (
             <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
@@ -582,7 +582,7 @@ function ApplicationScenarios() {
 function FactorySection() {
   const factoryImages = [
     ['研发设计', img.rd],
-    ['吸塑成型', img.forming],
+    ['成型生产', img.forming],
     ['丝印处理', img.screenPrint],
     ['组装质检', img.workshop],
   ]
@@ -594,7 +594,23 @@ function FactorySection() {
         title="标准化生产流程，保障批量交付稳定性"
         text="从需求沟通到包装出货，用清晰流程降低沟通成本，帮助客户更快判断产品、认证和交付可行性。"
       />
-      <div className="factory-media-grid">
+      <div className="factory-proof-layout">
+        <Reveal className="factory-proof-main">
+          <img src={img.forming} alt="宏途运动头盔成型生产车间" loading="lazy" />
+          <span>Production Evidence</span>
+        </Reveal>
+        <Reveal delay={0.06} className="factory-proof-copy">
+          <p className="eyebrow">Factory Capability</p>
+          <h3>从打样确认到批量生产，围绕真实交付能力展开。</h3>
+          <p>工厂能力不只靠参数描述，更依赖研发、成型、表面处理、装配质检与出口包装等环节的稳定协同。</p>
+          <dl>
+            <div><dt>研发打样</dt><dd>外观、结构、配件和包装方案确认</dd></div>
+            <div><dt>生产制造</dt><dd>成熟产品线支持多类别运动头盔生产</dd></div>
+            <div><dt>品质控制</dt><dd>覆盖外观、装配、结构和出货抽检</dd></div>
+          </dl>
+        </Reveal>
+      </div>
+      <div className="factory-media-grid factory-evidence-grid">
         {factoryImages.map(([label, src], index) => (
           <Reveal key={label} delay={index * 0.04} className="factory-shot">
             <img src={src} alt={`宏途${label}生产环节`} loading="lazy" />
