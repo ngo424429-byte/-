@@ -1051,51 +1051,6 @@ a {
   line-height: 1.68;
 }
 
-.product-line-meta {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.65rem;
-  margin-top: 0.95rem;
-  border-top: 1px solid rgba(16, 17, 17, 0.12);
-  padding-top: 0.8rem;
-}
-
-.product-line-meta div {
-  display: grid;
-  gap: 0.18rem;
-}
-
-.product-line-meta small {
-  color: #745d32;
-  font-size: 0.72rem;
-  font-weight: 900;
-}
-
-.product-line-meta strong {
-  color: #25241f;
-  font-size: 0.88rem;
-  font-weight: 700;
-  line-height: 1.48;
-}
-
-.product-line-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.8rem;
-}
-
-.product-line-pills span {
-  border: 1px solid rgba(116, 93, 50, 0.18);
-  border-radius: 999px;
-  background: rgba(185, 154, 91, 0.09);
-  padding: 0.36rem 0.52rem;
-  color: #5e4a27;
-  font-size: 0.72rem;
-  font-weight: 780;
-  letter-spacing: 0;
-}
-
 .product-line-card .product-scene {
   margin-top: 0.72rem;
   border-left: 3px solid rgba(185, 154, 91, 0.75);

@@ -491,9 +491,7 @@ function Products() {
 }
 
 function ProductLineCard({ product, delay }) {
-  const { name, desc, scene, custom, cert, dev, gallery } = product
-  const fields = procurementFields({ name, scene, custom, cert, dev })
-  const market = fields.find(([label]) => label === '适用市场')?.[1] || '按目标市场确认'
+  const { name, desc, gallery } = product
 
   return (
     <Reveal delay={delay} className="product-line-card">
@@ -504,21 +502,6 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PROCUREMENT FILE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
-        <div className="product-line-meta">
-          <div>
-            <small>应用场景</small>
-            <strong>{scene}</strong>
-          </div>
-          <div>
-            <small>市场方向</small>
-            <strong>{market}</strong>
-          </div>
-        </div>
-        <div className="product-line-pills">
-          <span>{custom}</span>
-          <span>{cert}</span>
-          <span>{dev}</span>
-        </div>
         <a className="product-line-link" href="/gallery">查看该类更多款式<ArrowRight size={15} /></a>
       </div>
     </Reveal>
