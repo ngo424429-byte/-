@@ -132,6 +132,32 @@ const galleryItems = products.flatMap(([category, desc, scene, custom, cert, dev
 
 const galleryCategories = ['全部', ...products.map(([category]) => category)]
 
+const gallerySummaryMap = {
+  自行车头盔: '适合骑行品牌、跨境渠道和入门产品线。',
+  城市通勤头盔: '适合城市骑行、日常通勤与轻运动场景。',
+  公路骑行头盔: '适合公路入门、俱乐部渠道和训练产品线。',
+  儿童头盔: '适合儿童骑行、滑板和日常安全防护。',
+  滑雪头盔: '适合滑雪、户外运动与冬季装备渠道。',
+  '轮滑 / 滑板头盔': '适合滑板、轮滑、校园和运动渠道。',
+}
+
+const galleryTagMap = {
+  自行车头盔: ['骑行品牌', 'LOGO 定制', 'CE / CPSC', 'ODM / OEM'],
+  城市通勤头盔: ['城市骑行', '包装定制', 'LOGO 定制', '快速打样'],
+  公路骑行头盔: ['公路入门', '运动渠道', 'CE / CPSC', '配色定制'],
+  儿童头盔: ['儿童骑行', '图案定制', '包装定制', '测试配合'],
+  滑雪头盔: ['滑雪户外', '风镜配置', 'ASTM / CE', '冬季渠道'],
+  '轮滑 / 滑板头盔': ['滑板轮滑', '多尺码', 'LOGO 定制', '渠道客户'],
+}
+
+function gallerySummary(item) {
+  return gallerySummaryMap[item.category] || item.desc
+}
+
+function galleryTags(item) {
+  return (galleryTagMap[item.category] || ['ODM / OEM', 'LOGO 定制', '包装定制', '测试配合']).slice(0, 4)
+}
+
 const productionSteps = [
   ['01', '需求沟通', '确认产品类型、目标市场、预算区间和定制需求。'],
   ['02', '产品选型', '基于现有模具或新项目需求匹配合适方案。'],
@@ -930,53 +956,54 @@ function GalleryPage() {
         </div>
       </section>
       <section className="gallery-section">
-        <div className="gallery-filter" aria-label="产品分类筛选">
-          {galleryCategories.map((item) => (
-            <button key={item} type="button" className={item === category ? 'active' : ''} onClick={() => setCategory(item)}>
-              {item}
-            </button>
-          ))}
-        </div>
-        <div className="gallery-count">
-          <span>{visibleItems.length} 款图片 · 点击图片可放大查看</span>
-          <a href="/#contact" onClick={goToHomeContact}>发送目标款式编号，获取报价</a>
-        </div>
-        <div className="gallery-grid">
-          {visibleItems.map((item, index) => (
-            <Reveal key={`${item.id}-${item.src}`} delay={index * 0.01} className="gallery-item">
-              <button className="gallery-image-button" type="button" onClick={() => setPreview(item)} aria-label={`查看${item.id}大图`}>
-                <img src={item.src} alt={`${item.category} ${item.id}`} loading="lazy" />
+        <div className="gallery-section-inner">
+          <div className="gallery-filter" aria-label="产品分类筛选">
+            {galleryCategories.map((item) => (
+              <button key={item} type="button" className={item === category ? 'active' : ''} onClick={() => setCategory(item)}>
+                {item}
               </button>
-              <div className="gallery-card-body">
-                <div className="gallery-card-head">
-                  <div>
-                    <span>{item.id}</span>
-                    <h3>{item.category}</h3>
+            ))}
+          </div>
+          <div className="gallery-count">
+            <span>{visibleItems.length} 款图片 · 点击图片可放大查看</span>
+            <a href="/#contact" onClick={goToHomeContact}>发送目标款式编号，获取报价</a>
+          </div>
+          <div className="gallery-grid">
+            {visibleItems.map((item, index) => (
+              <Reveal key={`${item.id}-${item.src}`} delay={index * 0.01} className="gallery-item">
+                <button className="gallery-image-button" type="button" onClick={() => setPreview(item)} aria-label={`查看${item.id}大图`}>
+                  <img src={item.src} alt={`${item.category} ${item.id}`} loading="lazy" />
+                </button>
+                <div className="gallery-card-body">
+                  <div className="gallery-card-head">
+                    <div>
+                      <span>{item.id}</span>
+                      <h3>{item.category}</h3>
+                    </div>
+                  </div>
+                  <p className="gallery-card-summary">{gallerySummary(item)}</p>
+                  <div className="gallery-tags" aria-label={`${item.id}产品标签`}>
+                    {galleryTags(item).map((tag) => <span key={tag}>{tag}</span>)}
+                  </div>
+                  <div className="gallery-card-actions">
+                    <button className="gallery-copy-btn" type="button" onClick={() => handleCopyProductId(item.id)}>
+                      {copiedId === item.id ? '产品编号已复制' : '复制产品编号'}
+                    </button>
+                    <a className="gallery-mail-btn" href={productInquiryHref(item)}>发送此款询盘</a>
                   </div>
                 </div>
-                <dl className="gallery-card-specs">
-                  <div><dt>适用场景</dt><dd>{item.scene}</dd></div>
-                  <div><dt>可定制内容</dt><dd>{item.custom}</dd></div>
-                  <div><dt>认证支持</dt><dd>{item.cert}</dd></div>
-                </dl>
-                <div className="gallery-card-actions">
-                  <button className="gallery-copy-btn" type="button" onClick={() => handleCopyProductId(item.id)}>
-                    {copiedId === item.id ? '产品编号已复制' : '复制产品编号'}
-                  </button>
-                  <a className="gallery-mail-btn" href={productInquiryHref(item)}>发送此款询盘</a>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-        <Reveal className="gallery-inquiry-panel">
-          <div>
-            <p className="eyebrow">Inquiry Guidance</p>
-            <h2>没有找到完全匹配的款式？</h2>
-            <span>可以发送参考图片、目标市场、预计数量、LOGO / 包装需求。宏途可基于现有模具快速选型，也可评估来样开发和模具定制方案。</span>
+              </Reveal>
+            ))}
           </div>
-          <a className="btn light" href="/#contact" onClick={goToHomeContact}>查看联系方式<ArrowRight size={16} /></a>
-        </Reveal>
+          <Reveal className="gallery-inquiry-panel">
+            <div>
+              <p className="eyebrow">Inquiry Guidance</p>
+              <h2>没有找到完全匹配的款式？</h2>
+              <span>可以发送参考图片、目标市场、预计数量、LOGO / 包装需求。宏途可基于现有模具快速选型，也可评估来样开发和模具定制方案。</span>
+            </div>
+            <a className="btn light" href="/#contact" onClick={goToHomeContact}>查看联系方式<ArrowRight size={16} /></a>
+          </Reveal>
+        </div>
       </section>
       {preview && (
         <div className="cert-modal" role="dialog" aria-modal="true" aria-label={`${preview.id}产品预览`}>
@@ -992,10 +1019,13 @@ function GalleryPage() {
               <p>{preview.desc}</p>
               <dl>
                 <div><dt>产品编号</dt><dd>{preview.id}</dd></div>
+                <div><dt>产品类别</dt><dd>{preview.category}</dd></div>
                 <div><dt>适用场景</dt><dd>{preview.scene}</dd></div>
                 <div><dt>可定制内容</dt><dd>{preview.custom}</dd></div>
                 <div><dt>认证支持</dt><dd>{preview.cert}</dd></div>
+                <div><dt>目标市场</dt><dd>按客户销售区域与目标标准确认</dd></div>
                 <div><dt>开发方式</dt><dd>{preview.dev}</dd></div>
+                <div><dt>包装方式</dt><dd>支持彩盒、说明书、吊牌、外箱标签等方案</dd></div>
               </dl>
               <div className="gallery-modal-actions">
                 <button className="gallery-copy-btn" type="button" onClick={() => handleCopyProductId(preview.id)}>
