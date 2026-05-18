@@ -1788,7 +1788,7 @@ a {
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
 }
 
-.gallery-item button {
+.gallery-image-button {
   display: flex;
   width: 100%;
   height: 250px;
@@ -1811,8 +1811,19 @@ a {
   transform: scale(1.035);
 }
 
-.gallery-item div {
+.gallery-card-body {
   padding: 1rem;
+}
+
+.gallery-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.gallery-card-head > div {
+  min-width: 0;
 }
 
 .gallery-item span,
@@ -1868,13 +1879,44 @@ a {
   line-height: 1.42;
 }
 
-.gallery-item div > a {
+.gallery-card-actions,
+.gallery-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.8rem;
+}
+
+.gallery-copy-btn,
+.gallery-mail-btn {
   display: inline-flex;
-  margin-top: 0.7rem;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-family: inherit;
   color: #745d32;
   font-size: 0.82rem;
   font-weight: 900;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.gallery-copy-btn {
+  border: 1px solid #d2c9b8;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.gallery-mail-btn {
+  border: 1px solid #745d32;
+  background: #151515;
+  color: #f6f3ea;
+}
+
+.gallery-copy-btn:hover,
+.gallery-mail-btn:hover {
+  transform: translateY(-1px);
 }
 
 .gallery-modal-panel {
@@ -1953,6 +1995,47 @@ a {
 
 .gallery-inquiry-panel h2 {
   font-size: clamp(1.45rem, 2.5vw, 2.45rem);
+}
+
+.not-found-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(135deg, rgba(185, 154, 91, 0.1), transparent 34%),
+    radial-gradient(circle at 80% 20%, rgba(243, 239, 230, 0.08), transparent 28%),
+    #070707;
+  padding: clamp(6rem, 12vw, 9rem) 1rem 4rem;
+}
+
+.not-found-panel {
+  width: min(760px, 100%);
+  border: 1px solid rgba(243, 239, 230, 0.16);
+  border-radius: 18px;
+  background: rgba(20, 20, 20, 0.86);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.not-found-panel h1 {
+  margin: 0.5rem 0 0.8rem;
+  color: #f3efe6;
+  font-size: clamp(2.4rem, 7vw, 5.4rem);
+  line-height: 0.95;
+}
+
+.not-found-panel > p:not(.eyebrow) {
+  max-width: 520px;
+  color: #a8a8a0;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.75;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
 }
 
 .gallery-inquiry-panel span {
@@ -2802,7 +2885,7 @@ footer {
     flex: 0 0 auto;
   }
 
-  .gallery-item button {
+  .gallery-image-button {
     height: 230px;
   }
 

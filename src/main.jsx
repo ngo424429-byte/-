@@ -204,6 +204,33 @@ const inquiryMailBody = [
 
 const mailtoInquiry = `mailto:${copy.email}?subject=${encodeURIComponent('Helmet ODM/OEM Inquiry')}&body=${encodeURIComponent(inquiryMailBody)}`
 
+function setMetaDescription(content) {
+  if (typeof document === 'undefined') return
+  let meta = document.querySelector('meta[name="description"]')
+  if (!meta) {
+    meta = document.createElement('meta')
+    meta.name = 'description'
+    document.head.appendChild(meta)
+  }
+  meta.setAttribute('content', content)
+}
+
+function productInquiryHref(item) {
+  const body = [
+    `Product ID: ${item.id}`,
+    `Product category: ${item.category}`,
+    'Target market:',
+    'Estimated quantity:',
+    'Customization needs:',
+    'Certification requirements:',
+    'Expected delivery time:',
+    'Contact name:',
+    'Phone / WhatsApp / WeChat:',
+  ].join('\n')
+
+  return `mailto:${copy.email}?subject=${encodeURIComponent(`Helmet ODM/OEM Inquiry - ${item.id}`)}&body=${encodeURIComponent(body)}`
+}
+
 function procurementFields({ name, scene, custom, cert, dev }) {
   const marketMap = {
     自行车头盔: '欧洲 / 美国 / 日本 / 其他市场',
@@ -845,7 +872,21 @@ function MobileContactBar() {
 function GalleryPage() {
   const [category, setCategory] = useState('全部')
   const [preview, setPreview] = useState(null)
+  const [copiedId, setCopiedId] = useState('')
   const visibleItems = category === '全部' ? galleryItems : galleryItems.filter((item) => item.category === category)
+
+  useEffect(() => {
+    document.title = '运动头盔产品图库｜自行车头盔、儿童头盔、滑雪头盔 ODM/OEM 款式选型'
+    setMetaDescription('查看宏途运动头盔部分现有产品款式，覆盖自行车头盔、城市通勤头盔、儿童头盔、滑雪头盔、轮滑滑板头盔，支持 LOGO、颜色、包装、认证测试与 ODM/OEM 定制。')
+  }, [])
+
+  function handleCopyProductId(id) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(id).catch(() => {})
+    }
+    setCopiedId(id)
+    window.setTimeout(() => setCopiedId(''), 1600)
+  }
 
   return (
     <main>
@@ -898,18 +939,27 @@ function GalleryPage() {
         <div className="gallery-grid">
           {visibleItems.map((item, index) => (
             <Reveal key={`${item.id}-${item.src}`} delay={index * 0.01} className="gallery-item">
-              <button type="button" onClick={() => setPreview(item)} aria-label={`查看${item.id}大图`}>
+              <button className="gallery-image-button" type="button" onClick={() => setPreview(item)} aria-label={`查看${item.id}大图`}>
                 <img src={item.src} alt={`${item.category} ${item.id}`} loading="lazy" />
               </button>
-              <div>
-                <span>{item.id}</span>
-                <h3>{item.category}</h3>
+              <div className="gallery-card-body">
+                <div className="gallery-card-head">
+                  <div>
+                    <span>{item.id}</span>
+                    <h3>{item.category}</h3>
+                  </div>
+                </div>
                 <dl className="gallery-card-specs">
                   <div><dt>适用场景</dt><dd>{item.scene}</dd></div>
                   <div><dt>可定制内容</dt><dd>{item.custom}</dd></div>
                   <div><dt>认证支持</dt><dd>{item.cert}</dd></div>
                 </dl>
-                <a href="/#contact" onClick={goToHomeContact}>发送 {item.id} 咨询</a>
+                <div className="gallery-card-actions">
+                  <button className="gallery-copy-btn" type="button" onClick={() => handleCopyProductId(item.id)}>
+                    {copiedId === item.id ? '产品编号已复制' : '复制产品编号'}
+                  </button>
+                  <a className="gallery-mail-btn" href={productInquiryHref(item)}>发送此款询盘</a>
+                </div>
               </div>
             </Reveal>
           ))}
@@ -942,7 +992,12 @@ function GalleryPage() {
                 <div><dt>认证支持</dt><dd>{preview.cert}</dd></div>
                 <div><dt>开发方式</dt><dd>{preview.dev}</dd></div>
               </dl>
-              <a className="btn light" href="/#contact" onClick={goToHomeContact}>发送 {preview.id} 获取报价<ArrowRight size={16} /></a>
+              <div className="gallery-modal-actions">
+                <button className="gallery-copy-btn" type="button" onClick={() => handleCopyProductId(preview.id)}>
+                  {copiedId === preview.id ? '产品编号已复制' : '复制产品编号'}
+                </button>
+                <a className="btn light" href={productInquiryHref(preview)}>发送此款询盘<ArrowRight size={16} /></a>
+              </div>
             </div>
           </div>
         </div>
@@ -982,8 +1037,43 @@ function HomePage() {
   )
 }
 
+function NotFound() {
+  useEffect(() => {
+    document.title = '页面不存在｜宏途运动头盔 ODM/OEM 工厂'
+    setMetaDescription('页面不存在。你可以返回宏途运动头盔 ODM/OEM 工厂官网首页、进入产品图库，或联系工厂获取合作报价。')
+  }, [])
+
+  return (
+    <main>
+      <section className="not-found-page">
+        <div className="not-found-panel">
+          <p className="eyebrow">404 / Not Found</p>
+          <h1>页面不存在</h1>
+          <p>你访问的地址可能已变更，或链接输入有误。</p>
+          <div className="not-found-actions">
+            <a className="btn light" href="/">返回首页</a>
+            <a className="btn ghost" href="/gallery">进入产品图库</a>
+            <a className="btn ghost" href="/#contact">联系工厂</a>
+          </div>
+        </div>
+      </section>
+      <MobileContactBar />
+    </main>
+  )
+}
+
 function App() {
-  return window.location.pathname === '/gallery' ? <GalleryPage /> : <HomePage />
+  const { pathname } = window.location
+
+  if (pathname === '/galleryfe') {
+    window.location.replace('/gallery')
+    return null
+  }
+
+  if (pathname === '/') return <HomePage />
+  if (pathname === '/gallery') return <GalleryPage />
+
+  return <NotFound />
 }
 
 createRoot(document.getElementById('root')).render(<App />)
