@@ -3071,9 +3071,22 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .cert-thumb {
+    display: flex;
+    max-height: 190px;
+    align-items: flex-start;
+    justify-content: center;
+    background: #f7f4ec;
+    padding: 0.65rem;
+  }
+
   .cert-thumb img {
-    min-height: 230px;
-    max-height: 320px;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 176px;
+    object-fit: contain;
   }
 
   .capability-lines .capability-card {
