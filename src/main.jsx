@@ -460,8 +460,8 @@ function Products() {
     <section id="products" className="section section-offset dark-band">
       <SectionHead
         eyebrow="Product Lines"
-        title="覆盖多场景运动头盔产品线"
-        text="首页仅展示核心产品方向。更多款式、编号和放大预览放入独立产品图库，便于客户快速筛选目标款式。"
+        title="多品类运动头盔产品线"
+        text="覆盖自行车头盔、城市通勤头盔、公路骑行头盔、儿童头盔、滑雪头盔等产品方向，支持 LOGO、颜色、内衬、包装和认证测试配合。"
       />
       <div className="product-line-summary" aria-label="通用定制能力">
         <span>LOGO / 配色 / 内衬 / 织带 / 包装</span>
@@ -491,7 +491,7 @@ function Products() {
 }
 
 function ProductLineCard({ product, delay }) {
-  const { name, desc, gallery } = product
+  const { name, desc, custom, cert, dev, gallery } = product
 
   return (
     <Reveal delay={delay} className="product-line-card">
@@ -502,6 +502,20 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PROCUREMENT FILE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
+        <dl className="product-line-specs">
+          <div>
+            <dt>可定制内容</dt>
+            <dd>{custom}</dd>
+          </div>
+          <div>
+            <dt>认证方向</dt>
+            <dd>{cert}</dd>
+          </div>
+          <div>
+            <dt>打样周期</dt>
+            <dd>{dev}</dd>
+          </div>
+        </dl>
         <a className="product-line-link" href="/gallery">查看该类更多款式<ArrowRight size={15} /></a>
       </div>
     </Reveal>
