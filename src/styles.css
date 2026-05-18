@@ -903,35 +903,58 @@ a {
 .about-media {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 1.65rem;
-  background: #161616;
-  box-shadow: 0 32px 110px rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(243, 239, 230, 0.13);
+  border-radius: 18px;
+  background: #0c0c0c;
 }
 
 .about-media img {
+  display: block;
   aspect-ratio: 16 / 10;
   min-height: 0;
   background: #111;
-  object-fit: contain;
-  filter: saturate(0.84) contrast(1.04) brightness(0.9);
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.03) brightness(0.96);
+}
+
+.about-media::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  content: "";
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.5));
+  pointer-events: none;
 }
 
 .about-media div {
   position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
+  left: 1.1rem;
+  right: auto;
+  bottom: 1.1rem;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.56);
-  padding: 0.75rem 1rem;
-  color: rgba(255, 255, 255, 0.9);
+  max-width: min(520px, calc(100% - 2.2rem));
+  border: 1px solid rgba(243, 239, 230, 0.14);
+  border-radius: 14px;
+  background: rgba(12, 12, 12, 0.68);
+  padding: 0.7rem 0.9rem;
+  color: rgba(243, 239, 230, 0.92);
+  font-size: clamp(0.86rem, 1.35vw, 1.05rem);
   font-weight: 800;
-  backdrop-filter: blur(14px);
+  line-height: 1.25;
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.about-media div svg {
+  color: #b99a5b;
+  flex: 0 0 auto;
+}
+
+.about-media div span {
+  min-width: 0;
 }
 
 .product-line-grid {
@@ -2401,13 +2424,13 @@ footer {
 }
 
 .about-media {
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: none;
 }
 
 .about-media div {
-  border-radius: 12px;
-  background: rgba(7, 7, 7, 0.78);
+  border-radius: 14px;
+  background: rgba(12, 12, 12, 0.68);
 }
 
 .factory-proof-layout {
