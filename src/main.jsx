@@ -4,7 +4,6 @@ import {
   ArrowRight,
   BadgeCheck,
   Boxes,
-  Building2,
   CheckCircle2,
   ChevronDown,
   ClipboardCheck,
@@ -451,13 +450,6 @@ function About() {
             ))}
           </div>
         </div>
-        <Reveal delay={0.08} className="about-media">
-          <img src={img.reception} alt="东莞宏途运动用品有限公司前台形象墙" loading="lazy" />
-          <div>
-            <Building2 size={18} />
-            <span>{copy.company}</span>
-          </div>
-        </Reveal>
       </div>
     </section>
   )
@@ -471,31 +463,37 @@ function Products() {
         title="覆盖多场景运动头盔产品线"
         text="首页仅展示核心产品方向。更多款式、编号和放大预览放入独立产品图库，便于客户快速筛选目标款式。"
       />
-      <div className="product-line-grid">
-        {products.map(([name, desc, scene, custom, cert, dev, gallery], index) => (
-          <ProductLineCard
-            key={name}
-            delay={index * 0.035}
-            product={{ name, desc, scene, custom, cert, dev, gallery }}
-          />
-        ))}
+      <div className="product-line-summary" aria-label="通用定制能力">
+        <span>LOGO / 配色 / 内衬 / 织带 / 包装</span>
+        <span>按目标市场配合认证测试</span>
+        <span>常规打样约 7 天，复杂项目另行确认</span>
       </div>
-      <Reveal className="product-gallery-entry">
-        <div>
-          <p>需要查看更多款式？</p>
-          <span>进入完整产品图库，按类别查看更多现有款式，适合选型、打样和询盘前沟通。</span>
+      <div className="product-line-panel">
+        <div className="product-line-grid">
+          {products.map(([name, desc, scene, custom, cert, dev, gallery], index) => (
+            <ProductLineCard
+              key={name}
+              delay={index * 0.035}
+              product={{ name, desc, scene, custom, cert, dev, gallery }}
+            />
+          ))}
         </div>
-        <a className="btn light" href="/gallery">查看完整产品图库<ArrowRight size={16} /></a>
-      </Reveal>
+        <Reveal className="product-gallery-entry">
+          <div>
+            <p>需要查看更多款式？</p>
+            <span>进入完整产品图库，按类别查看更多现有款式，适合选型、打样和询盘前沟通。</span>
+          </div>
+          <a className="btn light" href="/gallery">查看完整产品图库<ArrowRight size={16} /></a>
+        </Reveal>
+      </div>
     </section>
   )
 }
 
 function ProductLineCard({ product, delay }) {
   const { name, desc, scene, custom, cert, dev, gallery } = product
-  const fields = procurementFields({ name, scene, custom, cert, dev }).filter(([label]) =>
-    ['适用客户', '适用市场', '可定制内容', '认证方向', '打样周期'].includes(label),
-  )
+  const fields = procurementFields({ name, scene, custom, cert, dev })
+  const market = fields.find(([label]) => label === '适用市场')?.[1] || '按目标市场确认'
 
   return (
     <Reveal delay={delay} className="product-line-card">
@@ -506,11 +504,21 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PROCUREMENT FILE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
-        <dl className="procurement-list">
-          {fields.map(([label, value]) => (
-            <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
-          ))}
-        </dl>
+        <div className="product-line-meta">
+          <div>
+            <small>应用场景</small>
+            <strong>{scene}</strong>
+          </div>
+          <div>
+            <small>市场方向</small>
+            <strong>{market}</strong>
+          </div>
+        </div>
+        <div className="product-line-pills">
+          <span>{custom}</span>
+          <span>{cert}</span>
+          <span>{dev}</span>
+        </div>
         <a className="product-line-link" href="/gallery">查看该类更多款式<ArrowRight size={15} /></a>
       </div>
     </Reveal>

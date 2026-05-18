@@ -963,6 +963,32 @@ a {
   gap: 1rem;
 }
 
+.product-line-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0 0 1.1rem;
+}
+
+.product-line-summary span {
+  border: 1px solid rgba(185, 154, 91, 0.28);
+  border-radius: 999px;
+  background: rgba(243, 239, 230, 0.045);
+  padding: 0.52rem 0.82rem;
+  color: rgba(243, 239, 230, 0.78);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.product-line-panel {
+  border: 1px solid rgba(243, 239, 230, 0.12);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(243, 239, 230, 0.08), rgba(243, 239, 230, 0.035)),
+    #10100f;
+  padding: clamp(0.85rem, 1.7vw, 1.25rem);
+}
+
 .product-line-card {
   overflow: hidden;
   border: 1px solid rgba(16, 16, 16, 0.12);
@@ -1023,6 +1049,51 @@ a {
   color: #4a4942;
   font-size: 0.9rem;
   line-height: 1.68;
+}
+
+.product-line-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  margin-top: 0.95rem;
+  border-top: 1px solid rgba(16, 17, 17, 0.12);
+  padding-top: 0.8rem;
+}
+
+.product-line-meta div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.product-line-meta small {
+  color: #745d32;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.product-line-meta strong {
+  color: #25241f;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.48;
+}
+
+.product-line-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.product-line-pills span {
+  border: 1px solid rgba(116, 93, 50, 0.18);
+  border-radius: 999px;
+  background: rgba(185, 154, 91, 0.09);
+  padding: 0.36rem 0.52rem;
+  color: #5e4a27;
+  font-size: 0.72rem;
+  font-weight: 780;
+  letter-spacing: 0;
 }
 
 .product-line-card .product-scene {
@@ -1203,11 +1274,9 @@ a {
   justify-content: space-between;
   gap: 1rem;
   margin-top: 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 1.25rem;
-  background:
-    radial-gradient(circle at 88% 20%, rgba(185, 154, 91, 0.1), transparent 18rem),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.028));
+  border: 1px solid rgba(185, 154, 91, 0.28);
+  border-radius: 16px;
+  background: rgba(7, 7, 7, 0.78);
   padding: 1.05rem;
 }
 
@@ -1219,7 +1288,7 @@ a {
 }
 
 .product-gallery-entry span {
-  color: var(--muted);
+  color: rgba(243, 239, 230, 0.68);
   line-height: 1.6;
 }
 
@@ -2381,26 +2450,30 @@ footer {
 }
 
 .about-industrial-layout {
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
+  grid-template-columns: 1fr;
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
 .capability-lines {
   display: grid;
   gap: 0;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border-top: 1px solid rgba(243, 239, 230, 0.12);
+  border-left: 1px solid rgba(243, 239, 230, 0.1);
 }
 
 .capability-lines .capability-card {
   display: grid;
-  grid-template-columns: 54px minmax(150px, 0.4fr) minmax(0, 1fr);
+  grid-template-columns: 44px minmax(0, 1fr);
   align-items: start;
-  gap: 1rem;
+  gap: 0.85rem;
   border: 0;
+  border-right: 1px solid rgba(243, 239, 230, 0.1);
   border-bottom: 1px solid rgba(243, 239, 230, 0.12);
   border-radius: 0;
   background: transparent;
-  padding: 1.05rem 0;
+  padding: 1.15rem;
 }
 
 .capability-lines .capability-card:hover {
@@ -2420,6 +2493,7 @@ footer {
 }
 
 .capability-lines .capability-card p {
+  grid-column: 2;
   margin: 0;
 }
 
