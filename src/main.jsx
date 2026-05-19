@@ -87,14 +87,6 @@ const stats = [
   ['ODM / OEM', '品牌定制与量产支持'],
 ]
 
-const trustTags = [
-  '2015 年成立',
-  '工厂占地约 10000 平方米',
-  '拥有 BSCI 工厂认证',
-  'CE / CPSC / ASTM 等多项认证检测',
-  '支持 LOGO / 配色 / 包装 / 外观定制',
-]
-
 const companyIntro = [
   '东莞市宏途运动用品有限公司成立于 2015 年，工厂占地约 10000 平方米，拥有 BSCI 认证，以及 CE / CPSC / ASTM 等多项认证检测资料。',
   '公司拥有完整的运动头盔生产链，依靠自身创新开发技术及生产能力，制造自行车骑行头盔、滑雪头盔、儿童头盔、平衡车头盔、轮滑头盔、攀岩头盔等产品。',
@@ -415,10 +407,11 @@ function LanguageSelector() {
 
 function Hero() {
   const heroProducts = [
-    ['/hongtu-assets/hongtu-109.jpeg', '自行车头盔'],
-    ['/hongtu-assets/hongtu-104.jpeg', '城市通勤头盔'],
-    ['/hongtu-assets/hongtu-089.jpeg', '滑雪头盔'],
+    { src: '/hongtu-assets/hongtu-109.jpeg', label: '自行车头盔', role: 'main' },
+    { src: '/hongtu-assets/hongtu-104.jpeg', label: '城市通勤头盔', role: 'top' },
+    { src: '/hongtu-assets/hongtu-089.jpeg', label: '滑雪头盔', role: 'bottom' },
   ]
+  const heroTrustLabels = ['OEM / ODM', '打样支持', '认证支持', '批量交付']
 
   return (
     <section id="top" className="hero hero-industrial section-offset">
@@ -438,17 +431,17 @@ function Hero() {
             <span>ODM/OEM 定制与量产工厂</span>
           </h1>
           <p className="hero-sub">为骑行品牌、跨境卖家、贸易商和渠道客户，提供自行车头盔、滑雪头盔、儿童头盔等产品的选型、打样、认证支持与批量交付。</p>
-          <div className="hero-tags">
-            {trustTags.map((tag) => <span key={tag}><CheckCircle2 size={15} />{tag}</span>)}
-          </div>
           <div className="actions">
             <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>发送需求，获取报价<ArrowRight size={16} /></a>
             <a className="btn ghost" href="/gallery">查看现有款式</a>
           </div>
+          <div className="hero-trust-labels" aria-label="合作能力标签">
+            {heroTrustLabels.map((tag) => <span key={tag}>{tag}</span>)}
+          </div>
         </div>
         <div className="hero-product-stage" aria-label="运动头盔产品主视觉">
-          {heroProducts.map(([src, label], index) => (
-            <div className="hero-product-card" key={label} style={{ '--delay': `${index * 0.12}s` }}>
+          {heroProducts.map(({ src, label, role }, index) => (
+            <div className={`hero-product-card hero-product-${role}`} key={label} style={{ '--delay': `${index * 0.16}s` }}>
               <img src={src} alt={`${label}产品主视觉`} loading={index === 0 ? 'eager' : 'lazy'} />
               <span>{label}</span>
             </div>
