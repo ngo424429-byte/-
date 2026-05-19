@@ -601,9 +601,9 @@ a {
 .hero-bg-image {
   z-index: -4;
   background-image: url("/hongtu-new/optimized/hero-factory-building.jpg");
-  background-position: center;
+  background-position: 42% center;
   background-size: cover;
-  filter: saturate(0.82) contrast(1.08) brightness(0.84);
+  filter: saturate(0.86) contrast(1.08) brightness(0.88);
   transform: scale(1);
   animation: heroImageDrift 24s ease-in-out infinite alternate;
 }
@@ -2863,7 +2863,7 @@ footer {
 
   .hero-bg-image {
     animation: none;
-    background-position: center;
+    background-position: 48% center;
   }
 
   .hero-bg-light {
