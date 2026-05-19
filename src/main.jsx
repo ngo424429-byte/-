@@ -12,6 +12,7 @@ import {
   Globe2,
   Mail,
   Menu,
+  MessageCircle,
   PackageCheck,
   Phone,
   SearchCheck,
@@ -108,6 +109,13 @@ const capabilities = [
   ['出口与交付', '服务品牌客户、跨境卖家与渠道客户，支持长期订单协作与出口包装交付。', PackageCheck, img.workshop],
 ]
 
+const factoryEvidence = [
+  ['公司门头 / 前台', '真实工厂环境', img.reception],
+  ['研发打样', '研发与样品确认', img.rd],
+  ['生产车间', '生产与装配流程', img.workshop],
+  ['质检设备', '测试与质量控制', img.equipment],
+]
+
 const products = [
   ['自行车头盔', '适合骑行品牌、跨境渠道和运动零售客户。', '城市骑行、公路入门、日常运动', 'LOGO、颜色、内衬、织带、包装', '可配合 CE / CPSC 等测试需求', '支持现有模具快速打样', ['/hongtu-assets/hongtu-109.jpeg', '/hongtu-assets/hongtu-111.jpeg', '/hongtu-assets/hongtu-112.jpeg', '/hongtu-assets/hongtu-108.jpeg', '/hongtu-assets/hongtu-107.jpeg']],
   ['城市通勤头盔', '适合城市骑行、日常通勤、轻运动品牌与跨境渠道客户。', '城市通勤、共享出行、日常骑行', 'LOGO、颜色、内衬、织带、包装', '可根据目标市场配合测试', '支持现有模具快速打样', ['/hongtu-assets/hongtu-104.jpeg', '/hongtu-assets/hongtu-106.jpeg', '/hongtu-assets/hongtu-105.png', '/hongtu-assets/hongtu-103.jpeg', '/hongtu-assets/hongtu-107.jpeg']],
@@ -156,6 +164,19 @@ function gallerySummary(item) {
 
 function galleryTags(item) {
   return (galleryTagMap[item.category] || ['ODM / OEM', 'LOGO 定制', '包装定制', '测试配合']).slice(0, 4)
+}
+
+const homeProductTagMap = {
+  自行车头盔: ['ODM / OEM', 'LOGO 定制', 'CE / CPSC'],
+  城市通勤头盔: ['城市骑行', '包装定制', '快速打样'],
+  公路骑行头盔: ['公路入门', '配色定制', 'CE / CPSC'],
+  儿童头盔: ['儿童防护', '图案定制', '包装定制'],
+  滑雪头盔: ['滑雪装备', '风镜配置', '测试配合'],
+  '轮滑 / 滑板头盔': ['滑板轮滑', '多尺码', 'ODM / OEM'],
+}
+
+function homeProductTags(name) {
+  return homeProductTagMap[name] || ['ODM / OEM', 'LOGO 定制', '包装定制']
 }
 
 const productionSteps = [
@@ -393,6 +414,12 @@ function LanguageSelector() {
 }
 
 function Hero() {
+  const heroProducts = [
+    ['/hongtu-assets/hongtu-109.jpeg', '自行车头盔'],
+    ['/hongtu-assets/hongtu-104.jpeg', '城市通勤头盔'],
+    ['/hongtu-assets/hongtu-089.jpeg', '滑雪头盔'],
+  ]
+
   return (
     <section id="top" className="hero hero-industrial section-offset">
       <div className="hero-bg-image" aria-hidden="true" />
@@ -418,6 +445,14 @@ function Hero() {
             <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>发送需求，获取报价<ArrowRight size={16} /></a>
             <a className="btn ghost" href="/gallery">查看现有款式</a>
           </div>
+        </div>
+        <div className="hero-product-stage" aria-label="运动头盔产品主视觉">
+          {heroProducts.map(([src, label], index) => (
+            <div className="hero-product-card" key={label} style={{ '--delay': `${index * 0.12}s` }}>
+              <img src={src} alt={`${label}产品主视觉`} loading={index === 0 ? 'eager' : 'lazy'} />
+              <span>{label}</span>
+            </div>
+          ))}
         </div>
         <div className="hero-industrial-stats" aria-label="核心信任数据">
           {['2015 年成立', '约 10000㎡ 工厂', 'BSCI 工厂认证', 'CE / CPSC / ASTM 支持', 'ODM / OEM 定制量产'].map((item) => (
@@ -452,6 +487,32 @@ function CompanyIntro() {
           {companyIntro.map((text) => <p key={text}>{text}</p>)}
         </div>
       </Reveal>
+    </section>
+  )
+}
+
+function FactoryEvidence() {
+  return (
+    <section className="factory-evidence-section section-offset" aria-label="工厂实拍证据">
+      <div className="factory-evidence-inner">
+        <SectionHead
+          eyebrow="Factory Evidence"
+          title="真实工厂实拍，支撑稳定交付"
+          text="用现场照片展示研发、生产、质检和接待环境，让采购客户更快判断工厂真实性与合作基础。"
+        />
+        <div className="factory-evidence-grid">
+          {factoryEvidence.map(([title, text, src], index) => (
+            <Reveal key={title} delay={index * 0.035} className="factory-evidence-card">
+              <img src={src} alt={`${title} - ${text}`} loading="lazy" />
+              <div>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }
@@ -517,7 +578,7 @@ function Products() {
 }
 
 function ProductLineCard({ product, delay }) {
-  const { name, desc, custom, cert, dev, gallery } = product
+  const { name, desc, gallery } = product
 
   return (
     <Reveal delay={delay} className="product-line-card">
@@ -528,20 +589,9 @@ function ProductLineCard({ product, delay }) {
         <span>ODM / OEM PROCUREMENT FILE</span>
         <h3>{name}</h3>
         <p>{desc}</p>
-        <dl className="product-line-specs">
-          <div>
-            <dt>可定制内容</dt>
-            <dd>{custom}</dd>
-          </div>
-          <div>
-            <dt>认证方向</dt>
-            <dd>{cert}</dd>
-          </div>
-          <div>
-            <dt>打样周期</dt>
-            <dd>{dev}</dd>
-          </div>
-        </dl>
+        <div className="product-line-tags" aria-label={`${name}快速标签`}>
+          {homeProductTags(name).map((tag) => <em key={tag}>{tag}</em>)}
+        </div>
         <a className="product-line-link" href="/gallery">查看该类更多款式<ArrowRight size={15} /></a>
       </div>
     </Reveal>
@@ -868,7 +918,7 @@ function Footer() {
         <a href={`mailto:${copy.email}`}>{copy.email}</a>
         <p>{copy.contactPerson}：{copy.phone}</p>
         <p>{copy.address}</p>
-        <a className="consumer-link" href="#" aria-label="消费者购买入口占位">消费者购买入口｜进入微信小店 / 小程序</a>
+        <span className="consumer-link">消费者购买入口｜微信小店 / 小程序即将上线</span>
       </div>
       <div className="footer-bottom">
         <p>(c) 2026 Hongtu Sporting Goods. All rights reserved.</p>
@@ -878,25 +928,44 @@ function Footer() {
 }
 
 function MobileContactBar() {
+  const [wechatOpen, setWechatOpen] = useState(false)
+
   return (
-    <div className="mobile-contact-bar" aria-label="移动端快速联系">
-      <a href="/#contact">
-        <ClipboardCheck size={17} />
-        <span>微信咨询</span>
-      </a>
-      <a href={mailtoInquiry}>
-        <Mail size={17} />
-        <span>发送邮件</span>
-      </a>
-      <a href={`tel:${copy.phone}`}>
-        <Phone size={17} />
-        <span>电话联系</span>
-      </a>
-      <a href="/gallery">
-        <SearchCheck size={17} />
-        <span>查看图库</span>
-      </a>
-    </div>
+    <>
+      <div className="mobile-contact-bar" aria-label="移动端快速联系">
+        <button type="button" onClick={() => setWechatOpen(true)}>
+          <MessageCircle size={17} />
+          <span>微信咨询</span>
+        </button>
+        <a href={mailtoInquiry}>
+          <Mail size={17} />
+          <span>发送邮件</span>
+        </a>
+        <a href={`tel:${copy.phone}`}>
+          <Phone size={17} />
+          <span>电话联系</span>
+        </a>
+        <a href="/gallery">
+          <SearchCheck size={17} />
+          <span>查看图库</span>
+        </a>
+      </div>
+      {wechatOpen && (
+        <div className="wechat-modal" role="dialog" aria-modal="true" aria-label="微信咨询">
+          <button className="wechat-modal-backdrop" type="button" onClick={() => setWechatOpen(false)} aria-label="关闭微信咨询弹窗" />
+          <div className="wechat-modal-panel">
+            <button className="wechat-modal-close" type="button" onClick={() => setWechatOpen(false)} aria-label="关闭">
+              <X size={20} />
+            </button>
+            <p className="eyebrow">Wechat Inquiry</p>
+            <h2>微信咨询</h2>
+            <p>扫码添加微信，请发送产品类型、目标市场、预计数量和参考图片。</p>
+            <img src={img.wechatQr} alt="微信咨询二维码" />
+            <button className="btn light" type="button" onClick={() => setWechatOpen(false)}>关闭</button>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -1057,6 +1126,7 @@ function HomePage() {
       <Nav />
       <Hero />
       <CompanyIntro />
+      <FactoryEvidence />
       <TrustStats />
       <About />
       <Products />
