@@ -543,11 +543,6 @@ function Products() {
         title="多品类运动头盔产品线"
         text="覆盖自行车头盔、城市通勤头盔、公路骑行头盔、儿童头盔、滑雪头盔等产品方向，支持 LOGO、颜色、内衬、包装和认证测试配合。"
       />
-      <div className="product-line-summary" aria-label="通用定制能力">
-        <span>LOGO / 配色 / 内衬 / 织带 / 包装</span>
-        <span>按目标市场配合认证测试</span>
-        <span>常规打样约 7 天，复杂项目另行确认</span>
-      </div>
       <div className="product-line-panel">
         <div className="product-line-grid">
           {products.map(([name, desc, scene, custom, cert, dev, gallery], index) => (
@@ -1120,10 +1115,10 @@ function HomePage() {
       <Hero />
       <CompanyIntro />
       <FactoryEvidence />
-      <TrustStats />
-      <About />
       <Products />
       <ApplicationScenarios />
+      <TrustStats />
+      <About />
       <FactorySection />
       <Certs />
       <Custom />
