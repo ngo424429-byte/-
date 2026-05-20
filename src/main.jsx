@@ -102,7 +102,6 @@ const capabilities = [
 ]
 
 const factoryEvidence = [
-  ['公司门头 / 前台', '真实工厂环境', img.reception],
   ['研发打样', '研发与样品确认', img.rd],
   ['生产车间', '生产与装配流程', img.workshop],
   ['质检设备', '测试与质量控制', img.equipment],
@@ -408,8 +407,8 @@ function LanguageSelector() {
 function Hero() {
   const heroProducts = [
     { src: '/hongtu-assets/hongtu-109.jpeg', label: '自行车头盔', role: 'main' },
-    { src: '/hongtu-assets/hongtu-104.jpeg', label: '城市通勤头盔', role: 'top' },
-    { src: '/hongtu-assets/hongtu-089.jpeg', label: '滑雪头盔', role: 'bottom' },
+    { src: '/hongtu-assets/hongtu-111.jpeg', label: '白色骑行头盔', role: 'top' },
+    { src: '/hongtu-assets/hongtu-112.jpeg', label: '定制配色头盔', role: 'bottom' },
   ]
   const heroTrustLabels = ['OEM / ODM', '打样支持', '认证支持', '批量交付']
 
@@ -491,7 +490,7 @@ function FactoryEvidence() {
         <SectionHead
           eyebrow="Factory Evidence"
           title="真实工厂实拍，支撑稳定交付"
-          text="用现场照片展示研发、生产、质检和接待环境，让采购客户更快判断工厂真实性与合作基础。"
+          text="用现场照片展示研发、生产和质检环节，让采购客户更快判断工厂真实性与合作基础。"
         />
         <div className="factory-evidence-grid">
           {factoryEvidence.map(([title, text, src], index) => (
