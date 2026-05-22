@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   ArrowRight,
@@ -22,7 +22,7 @@ import {
   Wrench,
   X,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useReducedMotion, useSpring, useTime, useTransform } from 'framer-motion'
 import './styles.css'
 
 const copy = {
@@ -101,19 +101,20 @@ const capabilities = [
   ['出口与交付', '服务品牌客户、跨境卖家与渠道客户，支持长期订单协作与出口包装交付。', PackageCheck, img.workshop],
 ]
 
-const factoryEvidence = [
-  ['研发打样', '研发与样品确认', img.rd],
-  ['生产车间', '生产与装配流程', img.workshop],
-  ['质检设备', '测试与质量控制', img.equipment],
+const projectStartItems = [
+  ['01', '目标款式', '产品类型、参考图片或图库编号'],
+  ['02', '销售市场', '欧洲、美国、日本或其他目标区域'],
+  ['03', '定制需求', 'LOGO、颜色、内衬、织带、包装'],
+  ['04', '订单预期', '预计数量、认证需求和期望交期'],
 ]
 
 const products = [
-  ['自行车头盔', '适合骑行品牌、跨境渠道和运动零售客户。', '城市骑行、公路入门、日常运动', 'LOGO、颜色、内衬、织带、包装', '可配合 CE / CPSC 等测试需求', '支持现有模具快速打样', ['/hongtu-assets/hongtu-109.jpeg', '/hongtu-assets/hongtu-111.jpeg', '/hongtu-assets/hongtu-112.jpeg', '/hongtu-assets/hongtu-108.jpeg', '/hongtu-assets/hongtu-107.jpeg']],
-  ['城市通勤头盔', '适合城市骑行、日常通勤、轻运动品牌与跨境渠道客户。', '城市通勤、共享出行、日常骑行', 'LOGO、颜色、内衬、织带、包装', '可根据目标市场配合测试', '支持现有模具快速打样', ['/hongtu-assets/hongtu-104.jpeg', '/hongtu-assets/hongtu-106.jpeg', '/hongtu-assets/hongtu-105.png', '/hongtu-assets/hongtu-103.jpeg', '/hongtu-assets/hongtu-107.jpeg']],
-  ['公路骑行头盔', '适合骑行装备品牌、俱乐部渠道和训练入门产品线。', '公路骑行、周末训练、运动渠道', '外壳配色、LOGO、内衬、织带', '可配合 CE / CPSC 等测试需求', '可按项目评估开发方式', ['/hongtu-assets/hongtu-111.jpeg', '/hongtu-assets/hongtu-112.jpeg', '/hongtu-assets/hongtu-109.jpeg', '/hongtu-assets/hongtu-108.jpeg', '/hongtu-assets/hongtu-107.jpeg']],
-  ['儿童头盔', '适合儿童运动、防护用品、平衡车和礼品渠道客户。', '儿童骑行、平衡车、滑行运动', '图案、尺码、内衬、包装', '按目标市场配合儿童产品测试', '现有款可快速评估打样', ['/hongtu-assets/hongtu-098.png', '/hongtu-assets/hongtu-099.jpeg', '/hongtu-assets/hongtu-100.jpeg', '/hongtu-assets/hongtu-101.jpeg', '/hongtu-assets/hongtu-102.jpeg']],
-  ['滑雪头盔', '适合雪具品牌、户外渠道和季节性运动产品采购。', '滑雪、户外运动、防护用品', 'LOGO、内衬、风镜、包装', '可配合 ASTM / CE 等测试需求', '根据结构配置评估打样', ['/hongtu-assets/hongtu-089.jpeg', '/hongtu-assets/hongtu-090.jpeg', '/hongtu-assets/hongtu-091.jpeg', '/hongtu-assets/hongtu-092.jpeg', '/hongtu-assets/hongtu-093.jpeg']],
-  ['轮滑 / 滑板头盔', '适合青少年运动、线下零售、跨境平台和渠道客户。', '轮滑、滑板、平衡车、轻运动', '颜色、LOGO、织带、包装', '可根据销售区域配合测试', '支持批量与多尺码方案', ['/hongtu-assets/hongtu-102.jpeg', '/hongtu-assets/hongtu-095.jpeg', '/hongtu-assets/hongtu-096.jpeg', '/hongtu-assets/hongtu-097.jpeg', '/hongtu-assets/hongtu-104.jpeg']],
+  ['自行车头盔', '适合骑行品牌、跨境渠道和运动零售客户。', '城市骑行、公路入门、日常运动', 'LOGO、颜色、内衬、织带、包装', '可配合 CE / CPSC 等测试需求', '支持现有模具快速打样', ['/hongtu-selected/road-70ld-blue-01.jpg', '/hongtu-selected/road-70ld-white-01.jpg', '/hongtu-selected/road-72ld-dark-side.jpg', '/hongtu-selected/bike-black-front.jpg', '/hongtu-selected/bike-white-side.jpg']],
+  ['城市通勤头盔', '适合城市骑行、日常通勤、轻运动品牌与跨境渠道客户。', '城市通勤、共享出行、日常骑行', 'LOGO、颜色、内衬、织带、包装', '可根据目标市场配合测试', '支持现有模具快速打样', ['/hongtu-selected/city-black-visor.jpg', '/hongtu-selected/city-white-visor.jpg', '/hongtu-selected/city-white-shell.jpg', '/hongtu-selected/bike-white-side.jpg', '/hongtu-selected/road-70ld-white-side.jpg']],
+  ['公路骑行头盔', '适合骑行装备品牌、俱乐部渠道和训练入门产品线。', '公路骑行、周末训练、运动渠道', '外壳配色、LOGO、内衬、织带', '可配合 CE / CPSC 等测试需求', '可按项目评估开发方式', ['/hongtu-selected/road-72ld-dark-side.jpg', '/hongtu-selected/road-72ld-white-side.jpg', '/hongtu-selected/road-72ld-black-side.jpg', '/hongtu-selected/road-70ld-black-gold.jpg', '/hongtu-selected/road-70ld-blue-01.jpg']],
+  ['儿童头盔', '适合儿童运动、防护用品、平衡车和礼品渠道客户。', '儿童骑行、平衡车、滑行运动', '图案、尺码、内衬、包装', '按目标市场配合儿童产品测试', '现有款可快速评估打样', ['/hongtu-selected/kid-animal-blue.jpg', '/hongtu-selected/kid-unicorn-orange.jpg', '/hongtu-selected/kid-unicorn-green.jpg', '/hongtu-selected/skate-black-pink.jpg', '/hongtu-selected/skate-black-gold.jpg']],
+  ['滑雪头盔', '适合雪具品牌、户外渠道和季节性运动产品采购。', '滑雪、户外运动、防护用品', 'LOGO、内衬、风镜、包装', '可配合 ASTM / CE 等测试需求', '根据结构配置评估打样', ['/hongtu-selected/snow-black-side.jpg', '/hongtu-selected/snow-white-side.jpg', '/hongtu-selected/snow-pink-side.jpg', '/hongtu-selected/city-white-shell.jpg', '/hongtu-selected/city-black-visor.jpg']],
+  ['轮滑 / 滑板头盔', '适合青少年运动、线下零售、跨境平台和渠道客户。', '轮滑、滑板、平衡车、轻运动', '颜色、LOGO、织带、包装', '可根据销售区域配合测试', '支持批量与多尺码方案', ['/hongtu-selected/skate-black-pink.jpg', '/hongtu-selected/skate-black-gold.jpg', '/hongtu-selected/kid-animal-blue.jpg', '/hongtu-selected/kid-unicorn-green.jpg', '/hongtu-selected/city-white-shell.jpg']],
 ]
 
 const galleryItems = products.flatMap(([category, desc, scene, custom, cert, dev, gallery], categoryIndex) =>
@@ -170,15 +171,117 @@ function homeProductTags(name) {
   return homeProductTagMap[name] || ['ODM / OEM', 'LOGO 定制', '包装定制']
 }
 
+const heroShowcaseItems = [
+  {
+    index: '01',
+    tag: 'ROAD SERIES',
+    label: '公路骑行头盔',
+    src: '/hongtu-selected/road-72ld-dark-side.jpg',
+    href: '/gallery',
+    kind: 'product',
+    tier: 'anchor',
+    mobileOrder: 0,
+    x: 4,
+    y: 10,
+    z: 228,
+    rx: 3,
+    ry: -6,
+    rz: 0,
+    scale: 1.3,
+  },
+  {
+    index: '02',
+    tag: 'URBAN SERIES',
+    label: '城市通勤头盔',
+    src: '/hongtu-selected/city-white-visor.jpg',
+    href: '/gallery',
+    kind: 'product',
+    tier: 'satellite',
+    mobileOrder: 1,
+    x: -172,
+    y: -108,
+    z: 86,
+    rx: 7,
+    ry: 14,
+    rz: -7,
+    scale: 0.86,
+  },
+  {
+    index: '03',
+    tag: 'SNOW SERIES',
+    label: '滑雪头盔',
+    src: '/hongtu-selected/snow-white-side.jpg',
+    href: '/gallery',
+    kind: 'product',
+    tier: 'satellite',
+    mobileOrder: 2,
+    x: 188,
+    y: -104,
+    z: 72,
+    rx: -4,
+    ry: -15,
+    rz: 6,
+    scale: 0.84,
+  },
+  {
+    index: '04',
+    tag: 'KIDS SERIES',
+    label: '儿童防护头盔',
+    src: '/hongtu-selected/kid-unicorn-green.jpg',
+    href: '/gallery',
+    kind: 'product',
+    tier: 'satellite',
+    mobileOrder: 3,
+    x: -196,
+    y: 96,
+    z: 34,
+    rx: 8,
+    ry: 18,
+    rz: 7,
+    scale: 0.82,
+  },
+  {
+    index: '05',
+    tag: 'SKATE SERIES',
+    label: '轮滑滑板头盔',
+    src: '/hongtu-selected/skate-black-gold.jpg',
+    href: '/gallery',
+    kind: 'product',
+    tier: 'satellite',
+    mobileOrder: 4,
+    x: 206,
+    y: 88,
+    z: 108,
+    rx: 4,
+    ry: -13,
+    rz: -5,
+    scale: 0.8,
+  },
+]
+
+const heroMarqueeItems = [
+  'BICYCLE HELMET',
+  'URBAN HELMET',
+  'SNOW HELMET',
+  'KIDS HELMET',
+  'ODM / OEM',
+  'GALLERY',
+]
+
 const productionSteps = [
-  ['01', '需求沟通', '确认产品类型、目标市场、预算区间和定制需求。'],
-  ['02', '产品选型', '基于现有模具或新项目需求匹配合适方案。'],
-  ['03', '样品打样', '提供颜色、LOGO、配件、包装等样品确认。'],
-  ['04', '结构确认', '确认结构、佩戴系统、内衬、织带和包装方案。'],
-  ['05', '认证测试', '按目标市场要求配合第三方检测和认证流程。'],
-  ['06', '批量生产', '按确认样品和订单标准进入生产排期。'],
-  ['07', '品质检验', '完成外观、结构、装配、包装和出货抽检。'],
-  ['08', '包装出货', '支持彩盒、说明书、吊牌、外箱标签和出口包装。'],
+  ['01', '需求确认', '确认产品类型、目标市场、参考款式、定制方向和预计数量。'],
+  ['02', '打样确认', '确认颜色、LOGO、结构配置、内衬、织带和包装细节。'],
+  ['03', '测试与生产', '按目标市场配合测试需求，样品确认后进入生产排期。'],
+  ['04', '质检与出货', '完成外观、装配、包装和出货抽检，支持出口包装交付。'],
+]
+
+const productionPrep = [
+  '产品类型与参考图片',
+  '目标销售市场',
+  '预计采购数量',
+  'LOGO / 颜色 / 包装需求',
+  '认证或测试要求',
+  '期望交期与联系方式',
 ]
 
 const certMatrix = [
@@ -385,6 +488,20 @@ function Nav() {
   )
 }
 
+function useCompactHero(breakpoint = 760) {
+  const [compact, setCompact] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const update = () => setCompact(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [breakpoint])
+
+  return compact
+}
+
 function LanguageSelector() {
   const handleLanguageChange = (event) => {
     const lang = event.target.value
@@ -405,12 +522,166 @@ function LanguageSelector() {
 }
 
 function Hero() {
-  const heroProducts = [
-    { src: '/hongtu-assets/hongtu-109.jpeg', label: '自行车头盔', role: 'main' },
-    { src: '/hongtu-assets/hongtu-111.jpeg', label: '白色骑行头盔', role: 'top' },
-    { src: '/hongtu-assets/hongtu-112.jpeg', label: '定制配色头盔', role: 'bottom' },
+  const viewMode = 'spiral'
+  const [activeCard, setActiveCard] = useState(null)
+  const prefersReducedMotion = useReducedMotion()
+  const compactHero = useCompactHero()
+  const stageRef = useRef(null)
+  const time = useTime()
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const smoothX = useSpring(mouseX, { stiffness: 32, damping: 22 })
+  const smoothY = useSpring(mouseY, { stiffness: 32, damping: 22 })
+  const mouseRotateY = useTransform(smoothX, [-1, 1], [-11, 11])
+  const mouseRotateX = useTransform(smoothY, [-1, 1], [8, -8])
+  const idleRotateY = useTransform(time, (t) => Math.sin(t / 2200) * (prefersReducedMotion ? 2.5 : 6))
+  const idleRotateX = useTransform(time, (t) => Math.cos(t / 2800) * (prefersReducedMotion ? 1.8 : 4.5))
+  const fieldRotateY = useTransform([mouseRotateY, idleRotateY], ([mouse, idle]) => mouse + idle)
+  const fieldRotateX = useTransform([mouseRotateX, idleRotateX], ([mouse, idle]) => mouse + idle)
+  const heroSpiralActive = viewMode === 'spiral' && !compactHero
+  const floatHeight = prefersReducedMotion ? 6 : 12
+  const showcaseItems = compactHero
+    ? [...heroShowcaseItems].sort((a, b) => a.mobileOrder - b.mobileOrder)
+    : heroShowcaseItems
+
+  const handleMouseMove = (event) => {
+    if (!heroSpiralActive || !stageRef.current) return
+    const rect = stageRef.current.getBoundingClientRect()
+    mouseX.set(((event.clientX - rect.left) / rect.width - 0.5) * 2)
+    mouseY.set(((event.clientY - rect.top) / rect.height - 0.5) * 2)
+  }
+
+  const resetMouse = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+    setActiveCard(null)
+  }
+
+  const handleCardClick = (event, href) => {
+    if (!href.startsWith('#')) return
+    event.preventDefault()
+    scrollToSection(event, href.slice(1))
+  }
+
+  const orbitSlots = [
+    { x: 0, y: -2, z: 360, rx: 0, ry: 0, rz: -0.8, scale: 1.22, opacity: 1, frontness: 1 },
+    { x: 206, y: -86, z: 170, rx: -2, ry: -4.5, rz: 5.2, scale: 0.9, opacity: 0.88, frontness: 0.78 },
+    { x: 156, y: 112, z: 42, rx: 2.6, ry: -3.8, rz: -5.2, scale: 0.78, opacity: 0.72, frontness: 0.5 },
+    { x: -156, y: 110, z: 30, rx: 2.8, ry: 3.8, rz: 5.4, scale: 0.76, opacity: 0.68, frontness: 0.46 },
+    { x: -208, y: -86, z: 160, rx: -2.2, ry: 4.8, rz: -5.6, scale: 0.88, opacity: 0.84, frontness: 0.74 },
   ]
-  const heroTrustLabels = ['OEM / ODM', '打样支持', '认证支持', '批量交付']
+  const orbitTimes = [0, 0.2, 0.4, 0.6, 0.8, 1]
+  const orbitDuration = prefersReducedMotion ? 18 : 10.5
+  const getOrbitSequence = (index) => {
+    const total = orbitSlots.length
+    return Array.from({ length: total + 1 }, (_, step) => orbitSlots[(index + step) % total])
+  }
+  const getSlotFilter = (slot) => `blur(${(1 - slot.frontness) * 0.42}px) saturate(${0.84 + slot.frontness * 0.18}) brightness(${0.9 + slot.frontness * 0.12})`
+  const buildSpiralAnimation = (index, focused) => {
+    if (focused) {
+      return {
+        x: 0,
+        y: -4,
+        z: 440,
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+        scale: 1.34,
+        opacity: 1,
+        zIndex: 900,
+        filter: 'blur(0px) saturate(1.06) brightness(1.02)',
+      }
+    }
+
+    const sequence = getOrbitSequence(index)
+    return {
+      x: sequence.map((slot) => slot.x),
+      y: sequence.map((slot) => slot.y),
+      z: sequence.map((slot) => slot.z),
+      rotateX: sequence.map((slot) => slot.rx),
+      rotateY: sequence.map((slot) => slot.ry),
+      rotateZ: sequence.map((slot) => slot.rz),
+      scale: sequence.map((slot) => slot.scale),
+      opacity: sequence.map((slot) => slot.opacity),
+      zIndex: sequence.map((slot) => Math.round(slot.z + 520)),
+      filter: sequence.map((slot) => getSlotFilter(slot)),
+    }
+  }
+
+  const renderShowcaseCard = (item, index) => {
+    const focused = !compactHero && activeCard === index
+    const spiralAnimate = buildSpiralAnimation(index, focused)
+    const cardClassName = [
+      'hero-portfolio-card',
+      item.kind === 'photo' ? 'is-photo' : 'is-product',
+      item.tier === 'anchor' ? 'is-anchor' : 'is-satellite',
+      focused ? 'is-focused' : '',
+    ].filter(Boolean).join(' ')
+    const cardBody = (
+      <>
+        <span className="hero-portfolio-card-index" aria-hidden="true">{item.index}</span>
+        <div className="hero-portfolio-card-media">
+          <img src={item.src} alt={`${item.label}预览`} loading={index > 1 ? 'lazy' : undefined} />
+        </div>
+        <span className="hero-portfolio-card-meta">
+          <small>{item.tag}</small>
+          <strong>{item.label}</strong>
+        </span>
+      </>
+    )
+    if (compactHero) {
+      return (
+        <motion.a
+          key={`${item.index}-${item.src}`}
+          className={cardClassName}
+          href={item.href}
+          aria-label={`前往${item.label}`}
+          onClick={(event) => handleCardClick(event, item.href)}
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 6.8 + index * 0.3, repeat: Infinity, ease: 'easeInOut', delay: index * 0.18 }}
+          style={{ zIndex: Math.round(item.z + 200) }}
+        >
+          <div className="hero-portfolio-card-inner">{cardBody}</div>
+        </motion.a>
+      )
+    }
+
+    return (
+      <motion.a
+        key={`${item.index}-${item.src}`}
+        className={cardClassName}
+        href={item.href}
+        aria-label={`前往${item.label}`}
+        onClick={(event) => handleCardClick(event, item.href)}
+        onMouseEnter={() => setActiveCard(index)}
+        onFocus={() => setActiveCard(index)}
+        onMouseLeave={() => setActiveCard(null)}
+        onBlur={() => setActiveCard(null)}
+        initial={false}
+        animate={viewMode === 'spiral' ? spiralAnimate : { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, opacity: 1, filter: 'blur(0px) saturate(1)' }}
+        transition={focused
+          ? { type: 'spring', stiffness: 150, damping: 18, mass: 0.82 }
+          : { duration: orbitDuration, repeat: Infinity, ease: 'easeInOut', times: orbitTimes }}
+        style={{ zIndex: focused ? 900 : undefined, transformStyle: 'preserve-3d' }}
+      >
+        <motion.div
+          className="hero-portfolio-card-inner"
+          animate={viewMode === 'spiral' ? {
+            y: [0, item.tier === 'anchor' ? -floatHeight : -floatHeight * 0.72, 0],
+            rotateZ: [0, index % 2 === 0 ? 2.4 : -2.6, 0],
+          } : { y: 0, rotateZ: 0 }}
+          transition={{
+            duration: 6.8 + (index % 3) * 0.7,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: index * 0.14,
+          }}
+        >
+          {cardBody}
+        </motion.div>
+      </motion.a>
+    )
+  }
 
   return (
     <section id="top" className="hero hero-industrial section-offset">
@@ -429,22 +700,77 @@ function Hero() {
             <span>运动头盔</span>
             <span>ODM/OEM 定制与量产工厂</span>
           </h1>
-          <p className="hero-sub">为骑行品牌、跨境卖家、贸易商和渠道客户，提供自行车头盔、滑雪头盔、儿童头盔等产品的选型、打样、认证支持与批量交付。</p>
+          <p className="hero-sub">面向品牌方、跨境卖家与渠道客户的运动头盔制造工厂。选型、打样、认证与量产，一站对接。</p>
           <div className="actions">
             <a className="btn light" href="#contact" onClick={(event) => scrollToSection(event, 'contact')}>发送需求，获取报价<ArrowRight size={16} /></a>
             <a className="btn ghost" href="/gallery">查看现有款式</a>
           </div>
-          <div className="hero-trust-labels" aria-label="合作能力标签">
-            {heroTrustLabels.map((tag) => <span key={tag}>{tag}</span>)}
-          </div>
         </div>
-        <div className="hero-product-stage" aria-label="运动头盔产品主视觉">
-          {heroProducts.map(({ src, label, role }, index) => (
-            <div className={`hero-product-card hero-product-${role}`} key={label} style={{ '--delay': `${index * 0.16}s` }}>
-              <img src={src} alt={`${label}产品主视觉`} loading={index === 0 ? 'eager' : 'lazy'} />
-              <span>{label}</span>
+        <div
+          ref={stageRef}
+          className={`hero-portfolio-stage ${viewMode === 'list' ? 'is-list' : 'is-spiral'}${compactHero ? ' is-compact' : ''}`}
+          aria-label="运动头盔首屏档案"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={resetMouse}
+        >
+          <div className="hero-portfolio-backdrop" style={{ backgroundImage: 'url("/hongtu-selected/road-72ld-dark-side.jpg")' }} aria-hidden="true" />
+          <div className="hero-portfolio-orbit" aria-hidden="true" />
+          <div className="hero-portfolio-haze" aria-hidden="true" />
+          {viewMode === 'spiral' ? (
+            <motion.div
+              className="hero-portfolio-field"
+              style={heroSpiralActive ? { rotateX: fieldRotateX, rotateY: fieldRotateY } : undefined}
+            >
+              <motion.div
+                className="hero-portfolio-spiral-orbit"
+                style={{ transformStyle: 'preserve-3d' }}
+                animate={heroSpiralActive ? { y: [-8, 8, -8], rotateZ: [-1.2, 1.1, -1.2] } : { y: 0, rotateZ: 0 }}
+                transition={heroSpiralActive ? { duration: 13, repeat: Infinity, ease: 'easeInOut' } : undefined}
+              >
+                {showcaseItems.map((item, index) => renderShowcaseCard(item, index))}
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              className="hero-portfolio-list-grid"
+              aria-label="站内板块预览"
+              initial="hidden"
+              animate="visible"
+              variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+            >
+              {heroShowcaseItems.map((item) => (
+                <motion.a
+                  key={`list-${item.index}`}
+                  className={`hero-portfolio-card ${item.kind === 'photo' ? 'is-photo' : 'is-product'}${item.tier === 'anchor' ? ' is-anchor' : ' is-satellite'}`}
+                  href={item.href}
+                  aria-label={`前往${item.label}`}
+                  variants={{ hidden: { opacity: 0, y: 18, scale: 0.96 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={prefersReducedMotion ? undefined : { y: -4, scale: 1.02 }}
+                  onClick={(event) => handleCardClick(event, item.href)}
+                >
+                  <span className="hero-portfolio-card-index" aria-hidden="true">{item.index}</span>
+                  <div className="hero-portfolio-card-media">
+                    <img src={item.src} alt={`${item.label}预览`} loading="lazy" />
+                  </div>
+                  <span className="hero-portfolio-card-meta">
+                    <small>{item.tag}</small>
+                    <strong>{item.label}</strong>
+                  </span>
+                </motion.a>
+              ))}
+            </motion.div>
+          )}
+          <div className="hero-portfolio-marquee" aria-hidden="true">
+            <div className="hero-portfolio-marquee-track">
+              {[...heroMarqueeItems, ...heroMarqueeItems].map((item, index) => (
+                <span key={`${item}-${index}`}>{item}</span>
+              ))}
             </div>
-          ))}
+          </div>
+          <p className="hero-portfolio-caption">
+            <span>产品选型档案 · 点击查看更多款式</span>
+          </p>
         </div>
         <div className="hero-industrial-stats" aria-label="核心信任数据">
           {['2015 年成立', '约 10000㎡ 工厂', 'BSCI 工厂认证', 'CE / CPSC / ASTM 支持', 'ODM / OEM 定制量产'].map((item) => (
@@ -452,6 +778,7 @@ function Hero() {
           ))}
         </div>
       </div>
+      <div className="hero-scroll-bridge" aria-hidden="true" />
     </section>
   )
 }
@@ -485,22 +812,19 @@ function CompanyIntro() {
 
 function FactoryEvidence() {
   return (
-    <section className="factory-evidence-section section-offset" aria-label="工厂实拍证据">
-      <div className="factory-evidence-inner">
-        <SectionHead
-          eyebrow="Factory Evidence"
-          title="真实工厂实拍，支撑稳定交付"
-          text="用现场照片展示研发、生产和质检环节，让采购客户更快判断工厂真实性与合作基础。"
-        />
-        <div className="factory-evidence-grid">
-          {factoryEvidence.map(([title, text, src], index) => (
-            <Reveal key={title} delay={index * 0.035} className="factory-evidence-card">
-              <img src={src} alt={`${title} - ${text}`} loading="lazy" />
-              <div>
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
+    <section className="project-start-section section-offset" aria-label="项目启动资料">
+      <div className="project-start-inner">
+        <Reveal className="project-start-copy">
+          <p className="eyebrow">Project Start</p>
+          <h2>项目启动前，先确认四类关键信息</h2>
+          <p>把目标款式、销售市场、定制需求和订单预期说清楚，可以更快完成选型、报价、打样和认证判断。</p>
+        </Reveal>
+        <div className="project-start-grid">
+          {projectStartItems.map(([num, title, text], index) => (
+            <Reveal key={title} delay={index * 0.035} className="project-start-card">
+              <span>{num}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </Reveal>
           ))}
         </div>
@@ -645,7 +969,7 @@ function ApplicationScenarios() {
   ]
 
   return (
-    <section className="section scenario-section">
+    <section id="scenarios" className="section scenario-section section-offset">
       <div className="scenario-layout">
         <Reveal className="scenario-copy">
           <p className="eyebrow">Application Scenarios</p>
@@ -675,52 +999,35 @@ function ApplicationScenarios() {
 }
 
 function FactorySection() {
-  const factoryImages = [
-    ['研发设计', img.rd],
-    ['成型生产', img.forming],
-    ['丝印处理', img.screenPrint],
-    ['组装质检', img.workshop],
-  ]
-
   return (
     <section id="factory" className="section section-offset">
       <SectionHead
         eyebrow="Manufacturing Process"
-        title="标准化生产流程，保障批量交付稳定性"
-        text="从需求沟通到包装出货，用清晰流程降低沟通成本，帮助客户更快判断产品、认证和交付可行性。"
+        title="从样品确认到批量交付"
+        text="把 ODM/OEM 项目拆成清楚的合作节点，让客户知道什么时候确认方案、什么时候打样、什么时候进入生产。"
       />
-      <div className="factory-proof-layout">
-        <Reveal className="factory-proof-main">
-          <img src={img.forming} alt="宏途运动头盔成型生产车间" loading="lazy" />
-          <span>Production Evidence</span>
+      <div className="process-layout">
+        <div className="process-roadmap">
+          {productionSteps.map(([num, title, text], index) => (
+            <Reveal key={title} delay={index * 0.035} className="process-step-card">
+              <span>{num}</span>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.08} className="process-client-panel">
+          <p className="eyebrow">Before Quote</p>
+          <h3>客户先准备这些信息，报价和方案会更快。</h3>
+          <ul>
+            {productionPrep.map((item) => (
+              <li key={item}><CheckCircle2 size={16} />{item}</li>
+            ))}
+          </ul>
+          <a className="btn primary" href="#contact">发送需求，获取报价</a>
         </Reveal>
-        <Reveal delay={0.06} className="factory-proof-copy">
-          <p className="eyebrow">Factory Capability</p>
-          <h3>从打样确认到批量生产，围绕真实交付能力展开。</h3>
-          <p>工厂能力不只靠参数描述，更依赖研发、成型、表面处理、装配质检与出口包装等环节的稳定协同。</p>
-          <dl>
-            <div><dt>研发打样</dt><dd>外观、结构、配件和包装方案确认</dd></div>
-            <div><dt>生产制造</dt><dd>成熟产品线支持多类别运动头盔生产</dd></div>
-            <div><dt>品质控制</dt><dd>覆盖外观、装配、结构和出货抽检</dd></div>
-          </dl>
-        </Reveal>
-      </div>
-      <div className="factory-media-grid factory-evidence-grid">
-        {factoryImages.map(([label, src], index) => (
-          <Reveal key={label} delay={index * 0.04} className="factory-shot">
-            <img src={src} alt={`宏途${label}生产环节`} loading="lazy" />
-            <span>{label}</span>
-          </Reveal>
-        ))}
-      </div>
-      <div className="production-timeline">
-        {productionSteps.map(([num, title, text], index) => (
-          <Reveal key={title} delay={index * 0.025} className="timeline-card">
-            <span>{num}</span>
-            <h3>{title}</h3>
-            <p>{text}</p>
-          </Reveal>
-        ))}
       </div>
     </section>
   )
